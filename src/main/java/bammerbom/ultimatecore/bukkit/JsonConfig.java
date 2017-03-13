@@ -21,10 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package bammerbom.ultimatecore.bukkit.jsonconfiguration;
+package bammerbom.ultimatecore.bukkit;
 
-import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.resources.utils.FileUtil;
 import bammerbom.ultimatecore.bukkit.resources.utils.StringUtil;
 import org.json.simple.JSONArray;
@@ -39,7 +37,8 @@ public class JsonConfig implements Cloneable {
     private final File file;
     private final Map<String, Object> map;
 
-    public JsonConfig(File file2) {
+    @SuppressWarnings("unchecked")
+	public JsonConfig(File file2) {
         file = file2;
         List<String> list = FileUtil.getLines(file2);
         String list2 = StringUtil.joinList(list);
@@ -158,7 +157,8 @@ public class JsonConfig implements Cloneable {
         return (JSONArray) get(s);
     }
 
-    public List<String> getStringList(String s) {
+    @SuppressWarnings("unchecked")
+	public List<String> getStringList(String s) {
         if (!contains(s)) {
             return new ArrayList<>();
         }
