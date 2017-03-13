@@ -23,11 +23,11 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
-
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.*;
+
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 
 public class StreamUtil {
 
@@ -66,7 +66,7 @@ public class StreamUtil {
 
     public static List<File> deleteFile(File file) {
         if (file.isDirectory()) {
-            List failFiles = new ArrayList();
+            List<File> failFiles = new ArrayList<File>();
             deleteFileList(file, failFiles);
             return Collections.unmodifiableList(failFiles);
         }

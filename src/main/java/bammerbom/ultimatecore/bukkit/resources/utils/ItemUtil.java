@@ -23,8 +23,8 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.resources.databases.ItemDatabase;
 import bammerbom.ultimatecore.bukkit.resources.utils.ReflectionUtil.ReflectionStatic;
 import net.milkbowl.vault.item.Items;
@@ -41,16 +41,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.Map.Entry;
 
+@SuppressWarnings("deprecation")
 public class ItemUtil {
 
     static HashMap<Material, String> ids = new HashMap<>();
 
-    public static void start() {
+    @SuppressWarnings({ "unchecked" })
+	public static void start() {
         //ids
         try {
             Object ma = ReflectionUtil.executeStatic("REGISTRY", ReflectionStatic.fromNMS("Item")).fetch();
@@ -314,6 +315,8 @@ public class ItemUtil {
                     }
                 }
                 break;
+		default:
+			break;
         }
 
         return item;

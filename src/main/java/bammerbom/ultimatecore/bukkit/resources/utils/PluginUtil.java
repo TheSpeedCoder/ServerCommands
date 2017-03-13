@@ -23,8 +23,9 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -40,6 +41,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URLClassLoader;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -89,9 +91,6 @@ public class PluginUtil {
             List<String> depends = new ArrayList<>();
             depends.addAll(pdf.getDepend());
             depends.addAll(pdf.getSoftDepend());
-            if (depends == null) {
-                continue;
-            }
             for (String depend : depends) {
                 if (name.equalsIgnoreCase(depend)) {
                     dependedOnBy.add(pl.getName());
@@ -101,7 +100,8 @@ public class PluginUtil {
         return dependedOnBy;
     }
 
-    public static boolean unload(Plugin plugin) {
+    @SuppressWarnings("unchecked")
+	public static boolean unload(Plugin plugin) {
         String name = plugin.getName();
 
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -120,15 +120,15 @@ public class PluginUtil {
             try {
                 Field pluginsField = Bukkit.getPluginManager().getClass().getDeclaredField("plugins");
                 pluginsField.setAccessible(true);
-                plugins = (List) pluginsField.get(pluginManager);
+                plugins = (List<Plugin>) pluginsField.get(pluginManager);
 
                 Field lookupNamesField = Bukkit.getPluginManager().getClass().getDeclaredField("lookupNames");
                 lookupNamesField.setAccessible(true);
-                names = (Map) lookupNamesField.get(pluginManager);
+                names = (Map<String, Plugin>) lookupNamesField.get(pluginManager);
                 try {
                     Field listenersField = Bukkit.getPluginManager().getClass().getDeclaredField("listeners");
                     listenersField.setAccessible(true);
-                    listeners = (Map) listenersField.get(pluginManager);
+                    listeners = (Map<Event, SortedSet<RegisteredListener>>) listenersField.get(pluginManager);
                 } catch (Exception e) {
                     reloadlisteners = false;
                 }
@@ -138,7 +138,7 @@ public class PluginUtil {
 
                 Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
                 knownCommandsField.setAccessible(true);
-                commands = (Map) knownCommandsField.get(commandMap);
+                commands = (Map<String, Command>) knownCommandsField.get(commandMap);
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
                 return false;
@@ -156,7 +156,7 @@ public class PluginUtil {
         }
         if ((listeners != null) && (reloadlisteners)) {
             for (SortedSet<RegisteredListener> set : listeners.values()) {
-                for (Iterator it = set.iterator(); it.hasNext(); ) {
+                for (Iterator<?> it = set.iterator(); it.hasNext(); ) {
                     RegisteredListener value = (RegisteredListener) it.next();
                     if (value.getPlugin() == plugin) {
                         it.remove();
@@ -167,7 +167,7 @@ public class PluginUtil {
         Iterator<Map.Entry<String, Command>> it;
         if (commandMap != null) {
             for (it = commands.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<String, Command> entry = (Map.Entry) it.next();
+                Map.Entry<String, Command> entry = (Entry<String, Command>) it.next();
                 if ((entry.getValue() instanceof PluginCommand)) {
                     PluginCommand c = (PluginCommand) entry.getValue();
                     if (c.getPlugin() == plugin) {
@@ -313,7 +313,8 @@ public class PluginUtil {
         return null;
     }
 
-    public static boolean isSameVersion(String version1, String version2) {
+    @SuppressWarnings("unused")
+	public static boolean isSameVersion(String version1, String version2) {
         if (version1.contains(version2)) return true;
         if (version2.contains(version1)) return true;
         for (String s : version1.split("[ ;-]")) {

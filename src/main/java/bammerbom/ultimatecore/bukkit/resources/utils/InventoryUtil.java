@@ -57,7 +57,8 @@ public class InventoryUtil {
 
     }
 
-    public static void clearInventory(final Player p) {
+    @SuppressWarnings("deprecation")
+	public static void clearInventory(final Player p) {
         p.setItemInHand(new ItemStack(Material.AIR));
         PlayerInventory inv = p.getInventory();
         inv.clear();
@@ -82,7 +83,8 @@ public class InventoryUtil {
         }, 1L);
     }
 
-    public static void clearHandler(CommandSender cs, Player player, String[] args, int offset, boolean showExtended) {
+    @SuppressWarnings("deprecation")
+	public static void clearHandler(CommandSender cs, Player player, String[] args, int offset, boolean showExtended) {
         short data = -1;
         int type = -1;
         int amount = -1;
@@ -173,7 +175,8 @@ public class InventoryUtil {
         return true;
     }
 
-    public static boolean isEmptyInventory(PlayerInventory inv) {
+    @SuppressWarnings("deprecation")
+	public static boolean isEmptyInventory(PlayerInventory inv) {
         ItemStack[] inventory = inv.getContents();
         ItemStack[] armor = inv.getArmorContents();
 
@@ -191,7 +194,8 @@ public class InventoryUtil {
         return true;
     }
 
-    public static String convertInventoryToString(Inventory invInventory) {
+    @SuppressWarnings("deprecation")
+	public static String convertInventoryToString(Inventory invInventory) {
         String serialization = invInventory.getSize() + ";";
         for (int i = 0; i < invInventory.getSize(); i++) {
             ItemStack is = invInventory.getItem(i);
@@ -228,7 +232,8 @@ public class InventoryUtil {
         return serialization;
     }
 
-    public static Inventory convertStringToInventory(String invString, String name) {
+    @SuppressWarnings("deprecation")
+	public static Inventory convertStringToInventory(String invString, String name) {
         String[] serializedBlocks = invString.split(";");
         String invInfo = serializedBlocks[0];
         Inventory deserializedInventory = Bukkit.getServer().createInventory(null, Integer.valueOf(invInfo) % 9 == 0 ? Integer.valueOf(invInfo) : Integer.valueOf(invInfo) + (9 - (Integer

@@ -23,21 +23,12 @@
  */
 package bammerbom.ultimatecore.bukkit;
 
-import bammerbom.ultimatecore.bukkit.UltimateUpdater.UpdateResult;
-import bammerbom.ultimatecore.bukkit.UltimateUpdater.UpdateType;
 import bammerbom.ultimatecore.bukkit.api.UC;
 import bammerbom.ultimatecore.bukkit.api.UEconomy;
 import bammerbom.ultimatecore.bukkit.configuration.Config;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
-import com.gmail.cle.surreal.plugins.chatrangedbo.ChatRangeMain;
-import com.massivecraft.factions.entity.MPlayer;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -47,7 +38,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
-
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -59,14 +49,9 @@ public class r {
     public static ChatColor negative = ChatColor.RED;
     public static ChatColor neutral = ChatColor.AQUA;
     public static ChatColor positive = ChatColor.DARK_AQUA;
-
-    //Updater
-    public static UltimateUpdater updater;
     //Updater end
     //Metrics
-    public static UltimateMetrics metrics;
     public static ExtendedProperties en = null;
-    public static ExtendedProperties cu = null;
     public static Random ra = new Random();
     //Vault end
     //Methods
@@ -96,48 +81,6 @@ public class r {
     public static void start() {
         if (r.getCnfg().contains("Debug")) {
             setDebug(r.getCnfg().getBoolean("Debug"));
-        }
-    }
-
-    public static UltimateUpdater getUpdater() {
-        return updater;
-    }
-
-    public static void runUpdater() {
-        if (!r.getCnfg().getBoolean("Updater.check")) {
-            return;
-        }
-        Boolean dl = r.getCnfg().getBoolean("Updater.download");
-        updater = new UltimateUpdater(r.getUC(), 66979, UltimateCore.getPluginFile(), dl ? UpdateType.DEFAULT : UpdateType.NO_DOWNLOAD, true);
-        Thread thr = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                updater.waitForThread();
-                try {
-                    if (updater != null && updater.getResult() != null && updater.getResult().equals(UpdateResult.UPDATE_AVAILABLE)) {
-                        r.log("There is an update available for UltimateCore.");
-                        r.log("Use /uc update to update UltimateCore.");
-                    }
-                } catch (Exception ex) {
-                    ErrorLogger.log(ex, "Update check failed.");
-                }
-            }
-        });
-        thr.setName("UltimateUpdater");
-        thr.start();
-    }
-
-    //Metrics end
-
-    public static void runMetrics() {
-        if (!r.getCnfg().getBoolean("Metrics")) {
-            return;
-        }
-        try {
-            metrics = new UltimateMetrics(getUC());
-            metrics.start();
-        } catch (Exception ex) {
-            ErrorLogger.log(ex, "Failed to start metrics.");
         }
     }
 
@@ -185,8 +128,6 @@ public class r {
 
     protected static void removeUC() {
         uc = null;
-        updater = null;
-        metrics = null;
         vault = null;
     }
 
@@ -273,27 +214,6 @@ public class r {
             if (a) {
                 en.save(new FileOutputStream(UltimateFileLoader.ENf), "UltimateCore messages file.");
             }
-            //
-            try {
-                cu = new ExtendedProperties("UTF-8");
-                FileInputStream incu = new FileInputStream(UltimateFileLoader.LANGf);
-                cu.load(incu);
-                incu.close();
-                ExtendedProperties cuC = new ExtendedProperties("UTF-8");
-                cuC.load(r.getUC().getResource("Messages/" + FilenameUtils.getBaseName(UltimateFileLoader.LANGf.getName()) + ".properties"));
-                Boolean b = false;
-                for (String s : cuC.map.keySet()) {
-                    if (!cu.map.containsKey(s)) {
-                        cu.setProperty(s, cuC.getProperty(s));
-                        b = true;
-                    }
-                }
-                if (b) {
-                    en.save(new FileOutputStream(UltimateFileLoader.ENf), "UltimateCore messages file.");
-                }
-            } catch (NullPointerException | FileNotFoundException ex) {
-                //IGNORE: CUSTOM MESSAGES FILE
-            }
         } catch (IOException ex) {
             ErrorLogger.log(ex, "Failed to load language files.");
         }
@@ -321,23 +241,8 @@ public class r {
     }
 
     public static String mes(String padMessage, Object... repl) {
-        if (cu.map.containsKey(padMessage)) {
-            String a = r.positive + ChatColor.translateAlternateColorCodes('&', cu.getProperty(padMessage).replace("@1", r.positive + "").replace("@2", r.neutral + "").replace("@3", r
-                    .negative + "").replace("\\\\n", "\n"));
-            String repA = null;
-            for (Object s : repl) {
-                if (repA == null) {
-                    repA = s.toString();
-                } else {
-                    a = a.replace(repA, s.toString());
-                    repA = null;
-                }
-            }
-            return a;
-        }
         if (en.map.containsKey(padMessage)) {
-            String b = r.positive + ChatColor.translateAlternateColorCodes('&', en.getProperty(padMessage).replace("@1", r.positive + "").replace("@2", r.neutral + "").replace("@3", r
-                    .negative + "").replace("\\\\n", "\n"));
+            String b = ChatColor.translateAlternateColorCodes('&', en.getProperty(padMessage).replace("\\\\n", "\n"));
             String repB = null;
             for (Object s : repl) {
                 if (repB == null) {
@@ -349,7 +254,7 @@ public class r {
             }
             return b;
         }
-        r.log(r.negative + "Failed to find " + padMessage + " in Messages file.");
+        r.log("Failed to find " + padMessage + " in Messages file.");
         return "";
     }
 
@@ -359,7 +264,7 @@ public class r {
     }
 
     public static void log(Object message) {
-        String logo = ChatColor.translateAlternateColorCodes('&', "&9[&bUC&9]&r");
+        String logo = ChatColor.translateAlternateColorCodes('&', "&8ServerCommands&c> &7");
         if (message == null) {
             r.log("null");
             return;
@@ -371,7 +276,7 @@ public class r {
         if (!debug) {
             return;
         }
-        String logo = ChatColor.translateAlternateColorCodes('&', "&9[&bUC DEBUG&9]&r");
+        String logo = ChatColor.translateAlternateColorCodes('&', "&8ServerCommands &2DEBUG&c> &7");
         if (message == null) {
             r.debug("null");
             return;
@@ -388,12 +293,14 @@ public class r {
         debug = value;
     }
 
-    public static Player[] getOnlinePlayers() {
+    @SuppressWarnings("unchecked")
+	public static Player[] getOnlinePlayers() {
         List<Player> plz = (List<Player>) Bukkit.getOnlinePlayers();
         return plz.toArray(new Player[plz.size()]);
     }
 
-    public static List<Player> getOnlinePlayersL() {
+    @SuppressWarnings("unchecked")
+	public static List<Player> getOnlinePlayersL() {
         return (List<Player>) Bukkit.getOnlinePlayers();
     }
 
@@ -427,7 +334,8 @@ public class r {
         return found;
     }
 
-    public static OfflinePlayer searchOfflinePlayer(String s) {
+    @SuppressWarnings("deprecation")
+	public static OfflinePlayer searchOfflinePlayer(String s) {
         return Bukkit.getOfflinePlayer(s);
     }
 
@@ -551,51 +459,6 @@ public class r {
         return values.get(ra.nextInt(values.size()));
     }
 
-    public static String getTown(Player p) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("Towny")) {
-            return null;
-        }
-        Towny t = (Towny) Bukkit.getServer().getPluginManager().getPlugin("Towny");
-        if (t == null) {
-            return null;
-        }
-        Resident r;
-        try {
-            r = TownyUniverse.getDataSource().getResident(p.getName());
-        } catch (Exception ex) {
-            return null;
-        }
-        try {
-            return r.getTown().getName();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public static String getChatRangePrefix(OfflinePlayer p) {
-        try {
-            if (!Bukkit.getPluginManager().isPluginEnabled("ChatRange")) {
-                return null;
-            }
-            ChatRangeMain cr = (ChatRangeMain) Bukkit.getPluginManager().getPlugin("ChatRange");
-            return ChatColor.translateAlternateColorCodes('&', cr.getChatRange().getPlayerRange(p.getUniqueId()).getPrefix());
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public static String getChatRangeColour(OfflinePlayer p) {
-        try {
-            if (!Bukkit.getPluginManager().isPluginEnabled("ChatRange")) {
-                return null;
-            }
-            ChatRangeMain cr = (ChatRangeMain) Bukkit.getPluginManager().getPlugin("ChatRange");
-            return ChatColor.translateAlternateColorCodes('&', cr.getChatRange().getPlayerRange(p.getUniqueId()).getColour());
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
     public static double round(double value, int places) {
         if (places < 0) {
             return value;
@@ -605,18 +468,7 @@ public class r {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-
-    public static String getFaction(Player p) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("Factions")) {
-            return null;
-        }
-        try {
-            return MPlayer.get(p).getFaction().getName();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
+    
     public static String getPrimaryGroup(Player p) {
         try {
             return r.getVault().getPermission().getPrimaryGroup(p);

@@ -23,9 +23,9 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.databases;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.UltimateCore;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.resources.utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,11 +43,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ItemDatabase {
-
     private final transient static Map<String, String> items = new HashMap<>();
     private final transient static Map<ItemData, List<String>> names = new HashMap<>();
     private final transient static Map<String, Short> durabilities = new HashMap<>();
-    static private UltimateCore plugin;
+    private static UltimateCore plugin;
 
     public static void disable() {
         items.clear();
@@ -112,7 +111,8 @@ public class ItemDatabase {
         }
     }
 
-    private static ItemStack get(String id) {
+    @SuppressWarnings("deprecation")
+	private static ItemStack get(String id) {
         String itemid;
         String itemname;
         short metaData = 0;
@@ -297,7 +297,7 @@ class ManagedFile {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(this.file));
             try {
-                List lines = new ArrayList();
+                List<String> lines = new ArrayList<String>();
                 String line;
                 while (true) {
                     line = reader.readLine();

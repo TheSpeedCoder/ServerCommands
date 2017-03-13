@@ -25,16 +25,13 @@ package bammerbom.ultimatecore.bukkit.commands;
 
 import bammerbom.ultimatecore.bukkit.UltimateCommand;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.MetaItemStack;
 import bammerbom.ultimatecore.bukkit.resources.utils.InventoryUtil;
 import bammerbom.ultimatecore.bukkit.resources.utils.ItemUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -96,33 +93,6 @@ public class CmdGive implements UltimateCommand {
         if (r.checkArgs(args, 3)) {
             if (r.isInt(args[3])) {
                 item.setDurability(Short.parseShort(args[3]));
-            }
-            MetaItemStack meta = new MetaItemStack(item);
-            int metaStart = r.isInt(args[3]) ? 4 : 3;
-
-            if (args.length > metaStart) {
-                try {
-                    String s = r.getFinalArg(args, metaStart);
-                    if (s.startsWith("\\{")) {
-                        item = Bukkit.getUnsafe().modifyItemStack(item, s);
-                    } else {
-                        try {
-                            meta.parseStringMeta(cs, r.perm(cs, "uc.give.unsafe", false, false), args, metaStart);
-                        } catch (IllegalArgumentException ex) {
-                            if (ex.getMessage() != null && (ex.getMessage().contains("Enchantment level is either too" + " low or too high") || ex.getMessage().contains("Specified " +
-                                    "enchantment cannot be " + "applied"))) {
-                                r.sendMes(cs, "enchantUnsafe");
-                            } else {
-                                r.sendMes(cs, "giveMetadataFailed");
-                            }
-                            return;
-                        }
-                        item = meta.getItemStack();
-                    }
-                } catch (Exception e) {
-                    r.sendMes(cs, "giveMetadataFailed");
-                    return;
-                }
             }
         }
         InventoryUtil.addItem(target.getInventory(), item);

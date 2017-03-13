@@ -24,7 +24,6 @@
 package bammerbom.ultimatecore.bukkit.listeners;
 
 import bammerbom.ultimatecore.bukkit.api.UC;
-import bammerbom.ultimatecore.bukkit.api.UKit;
 import bammerbom.ultimatecore.bukkit.r;
 import bammerbom.ultimatecore.bukkit.resources.utils.LocationUtil;
 import org.bukkit.Bukkit;
@@ -36,10 +35,6 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
-import java.util.Map;
 
 public class JoinLeaveListener implements Listener {
 
@@ -49,26 +44,16 @@ public class JoinLeaveListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void JoinMessage(PlayerJoinEvent e) {
+    	//TODO If a player has permission for vanish hide there join message
         if (!e.getPlayer().hasPlayedBefore()) {
             //Message
             Bukkit.broadcastMessage(r.mes("firstJoin", "%Player", e.getPlayer().getDisplayName()));
-            //Kits
-            for (UKit kit : UC.getServer().getKits()) {
-                if (kit.firstJoin()) {
-                    final List<ItemStack> items = kit.getItems();
-                    final Map<Integer, ItemStack> leftOver = e.getPlayer().getInventory().addItem(items.toArray(new ItemStack[items.size()]));
-                    for (final ItemStack is : leftOver.values()) {
-                        e.getPlayer().getWorld().dropItemNaturally(e.getPlayer().getLocation(), is);
-                    }
-                    kit.setLastUsed(e.getPlayer(), System.currentTimeMillis());
-                }
-            }
             //Teleport to spawn
             LocationUtil.teleportUnsafe(e.getPlayer(), UC.getPlayer(e.getPlayer()).getSpawn(true) != null ? UC.getPlayer(e.getPlayer()).getSpawn(true) : e.getPlayer().getWorld()
                     .getSpawnLocation(), TeleportCause.PLUGIN, false);
         }
-        if (UC.getPlayer(e.getPlayer()).isBanned() || !r.getCnfg().getBoolean("JoinLeaveVisible")) {
-            e.setJoinMessage(null);
+        if (!r.getCnfg().getBoolean("JoinLeaveVisible")) {
+            e.setJoinMessage("");
             return;
         }
         e.setJoinMessage(r.mes("joinMessage", "%Player", UC.getPlayer(e.getPlayer()).getDisplayName()));
@@ -76,14 +61,16 @@ public class JoinLeaveListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void QuitMessage(PlayerQuitEvent e) {
-        if (UC.getPlayer(e.getPlayer()).isBanned() || !r.getCnfg().getBoolean("JoinLeaveVisible")) {
-            e.setQuitMessage(null);
+    	//TODO If a player has permission for vanish hide there quit message
+        if (!r.getCnfg().getBoolean("JoinLeaveVisible")) {
+            e.setQuitMessage("");
             return;
         }
         e.setQuitMessage(r.mes("quitMessage", "%Player", UC.getPlayer(e.getPlayer()).getDisplayName()));
     }
 
     @EventHandler(priority = EventPriority.LOW)
+    //TODO Shoulden't need to add a Vanish kick hide but just incase I'll leave this here!
     public void KickMessage(PlayerKickEvent e) {
         e.setLeaveMessage(r.mes("quitMessage", "%Player", UC.getPlayer(e.getPlayer()).getDisplayName()));
     }

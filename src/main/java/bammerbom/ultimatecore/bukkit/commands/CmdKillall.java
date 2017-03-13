@@ -25,7 +25,6 @@ package bammerbom.ultimatecore.bukkit.commands;
 
 import bammerbom.ultimatecore.bukkit.UltimateCommand;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.MobType;
 import org.bukkit.EntityEffect;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -33,7 +32,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,10 +81,6 @@ public class CmdKillall implements UltimateCommand {
             if (EntityType.fromName(args[0].replaceAll("_", "").toUpperCase()) != null) {
                 et = EntityType.fromName(args[0].replaceAll("_", "").toUpperCase());
             }
-            if (MobType.fromName(args[0]) != null) {
-                et = MobType.fromName(args[0]).getType();
-            }
-
         }
         Player p = (Player) cs;
         Integer amount = 0;

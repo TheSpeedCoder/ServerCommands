@@ -38,10 +38,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class BossbarUtil implements Listener {
-
-    static HashMap<UUID, BossBar> current = new HashMap<>();
-    static HashMap<BossBar, Integer> taskids = new HashMap<>();
-    static HashMap<BossBar, Boolean> taskcancel = new HashMap<>();
+    static HashMap<UUID, BossBar> current = new HashMap<UUID, BossBar>();
+    static HashMap<BossBar, Integer> taskids = new HashMap<BossBar, Integer>();
+    static HashMap<BossBar, Boolean> taskcancel = new HashMap<BossBar, Boolean>();
 
     public static void stop() {
         for (UUID u : current.keySet()) {
@@ -85,7 +84,8 @@ public class BossbarUtil implements Listener {
         return bar;
     }
 
-    public static void setMessage(String message, int seconds, BarColor color, BarStyle style) {
+    @SuppressWarnings("deprecation")
+	public static void setMessage(String message, int seconds, BarColor color, BarStyle style) {
         Validate.isTrue(seconds > 0, "Seconds must be above 1 but was: ", seconds);
         final BossBar bar = Bukkit.getServer().createBossBar(message, color, style);
         final double dragonHealthMinus = 1.0 / seconds;
@@ -124,7 +124,8 @@ public class BossbarUtil implements Listener {
         }
     }
 
-    public static void setMessage(final Player player, String message, int seconds, BarColor color, BarStyle style) {
+    @SuppressWarnings("deprecation")
+	public static void setMessage(final Player player, String message, int seconds, BarColor color, BarStyle style) {
         if (hasBar(player)) {
             removeBar(player);
         }

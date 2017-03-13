@@ -25,8 +25,7 @@ package bammerbom.ultimatecore.bukkit;
 
 import bammerbom.ultimatecore.bukkit.configuration.Config;
 import bammerbom.ultimatecore.bukkit.configuration.ConfigSection;
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;

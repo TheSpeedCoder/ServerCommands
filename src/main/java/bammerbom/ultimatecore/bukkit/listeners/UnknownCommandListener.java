@@ -23,8 +23,9 @@
  */
 package bammerbom.ultimatecore.bukkit.listeners;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.event.EventHandler;

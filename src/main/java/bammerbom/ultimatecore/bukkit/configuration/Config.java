@@ -23,8 +23,8 @@
  */
 package bammerbom.ultimatecore.bukkit.configuration;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.resources.utils.StreamUtil;
 import bammerbom.ultimatecore.bukkit.resources.utils.StringUtil;
 import org.bukkit.ChatColor;

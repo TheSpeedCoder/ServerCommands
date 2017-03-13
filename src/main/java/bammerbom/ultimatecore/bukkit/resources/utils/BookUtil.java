@@ -23,8 +23,8 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.UltimateFileLoader;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 
 import java.io.File;
 import java.io.IOException;

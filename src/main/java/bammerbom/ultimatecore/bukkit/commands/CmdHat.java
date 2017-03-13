@@ -51,7 +51,8 @@ public class CmdHat implements UltimateCommand {
         return Arrays.asList("head");
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void run(final CommandSender cs, String label, String[] args) {
         if (!r.isPlayer(cs)) {
             return;

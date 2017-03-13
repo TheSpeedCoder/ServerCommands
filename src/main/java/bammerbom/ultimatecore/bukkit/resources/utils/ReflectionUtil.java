@@ -23,8 +23,9 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import org.bukkit.Bukkit;
+
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -490,7 +491,8 @@ public class ReflectionUtil {
          * @return
          * @throws Exception
          */
-        private <T> T castOrCreate(Object obj, Class<T> as) throws Exception {
+        @SuppressWarnings("unchecked")
+		private <T> T castOrCreate(Object obj, Class<T> as) throws Exception {
             try {
                 if (as.isAssignableFrom(obj.getClass())) {
                     return (T) obj;

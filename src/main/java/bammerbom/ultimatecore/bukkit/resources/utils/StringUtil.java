@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 
-    public static final char CHAT_STYLE_CHAR = '�';
+    public static final char CHAT_STYLE_CHAR = '§';
     public static final int SPACE_WIDTH = getWidth(' ');
     public static final String[] EMPTY_ARRAY = new String[0];
     private static final Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9-]");
@@ -91,7 +91,7 @@ public class StringUtil {
             }
 
             if ((each instanceof Collection)) {
-                buf.append(joinList(seperator, ((Collection) each).toArray()));
+                buf.append(joinList(seperator, ((Collection<?>) each).toArray()));
             } else {
                 try {
                     buf.append(each.toString());
@@ -102,7 +102,7 @@ public class StringUtil {
         return buf.toString();
     }
 
-    public static String joinList(Collection c) {
+    public static String joinList(Collection<?> c) {
         return joinList(c.toArray());
     }
 
@@ -160,7 +160,7 @@ public class StringUtil {
             for (int i = 0; i < part.length(); i++) {
                 char character = part.charAt(i);
                 if (character != '\n') {
-                    if (character == '�') {
+                    if (character == '§') {
                         i++;
                     } else if (character == ' ') {
                         width += SPACE_WIDTH;
@@ -389,11 +389,11 @@ public class StringUtil {
     }
 
     public static String ampToColor(String line) {
-        return swapColorCodes(line, '&', '�');
+        return swapColorCodes(line, '&', '§');
     }
 
     public static String colorToAmp(String line) {
-        return swapColorCodes(line, '�', '&');
+        return swapColorCodes(line, '§', '&');
     }
 
     public static String swapColorCodes(String line, char fromCode, char toCode) {

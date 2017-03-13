@@ -52,7 +52,8 @@ public class CmdRepair implements UltimateCommand {
         return Arrays.asList("fix");
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void run(final CommandSender cs, String label, String[] args) {
         if (!r.checkArgs(args, 0)) {
             //repair

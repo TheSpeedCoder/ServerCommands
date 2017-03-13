@@ -23,10 +23,10 @@
  */
 package bammerbom.ultimatecore.bukkit.commands;
 
+import bammerbom.ultimatecore.bukkit.JsonConfig;
 import bammerbom.ultimatecore.bukkit.UltimateCommand;
 import bammerbom.ultimatecore.bukkit.UltimateFileLoader;
 import bammerbom.ultimatecore.bukkit.api.UEconomy;
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
 import bammerbom.ultimatecore.bukkit.r;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
@@ -53,7 +53,8 @@ public class CmdMoney implements UltimateCommand {
         return Arrays.asList("balance");
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void run(final CommandSender cs, String label, String[] args) {
         if (!r.perm(cs, "uc.money", true, true)) {
             return;
@@ -345,7 +346,7 @@ public class CmdMoney implements UltimateCommand {
             for (String s : c.listKeys(false)) {
                 mapO.put(s, c.getDouble(s));
             }
-            LinkedHashMap<String, Double> map = sortHashMapByValuesD(mapO);
+            LinkedHashMap<String, Double> map = (LinkedHashMap<String, Double>) sortHashMapByValuesD(mapO);
             Integer cur = 0;
             while ((map.size() - 1) >= cur && cur < 10) {
                 String player;
@@ -375,7 +376,6 @@ public class CmdMoney implements UltimateCommand {
             }
             r.sendMes(cs, "moneyStatusOthers", "%Player", t.getName(), "%Balance", r.getVault().getEconomy().format(r.getVault().getEconomy().getBalance(t)));
         }
-
     }
 
     @Override
@@ -383,36 +383,28 @@ public class CmdMoney implements UltimateCommand {
         return null;
     }
 
-    public LinkedHashMap sortHashMapByValuesD(HashMap<String, Double> passedMap) {
-        List mapKeys = new ArrayList(passedMap.keySet());
-        List mapValues = new ArrayList(passedMap.values());
+    public LinkedHashMap<?, ?> sortHashMapByValuesD(HashMap<String, Double> passedMap) {
+        List<Object> mapKeys = new ArrayList<Object>(passedMap.keySet());
+        List<Object> mapValues = new ArrayList<Object>(passedMap.values());
         Collections.sort(mapValues, Collections.reverseOrder());
         Collections.sort(mapKeys, Collections.reverseOrder());
-
-        LinkedHashMap sortedMap = new LinkedHashMap();
-
-        Iterator valueIt = mapValues.iterator();
+        LinkedHashMap<Object, Object> sortedMap = new LinkedHashMap<Object, Object>();
+        Iterator<?> valueIt = mapValues.iterator();
         while (valueIt.hasNext()) {
             Object val = valueIt.next();
-            Iterator keyIt = mapKeys.iterator();
-
+            Iterator<?> keyIt = mapKeys.iterator();
             while (keyIt.hasNext()) {
                 Object key = keyIt.next();
                 String comp1 = passedMap.get(key).toString();
                 String comp2 = val.toString();
-
                 if (comp1.equals(comp2)) {
                     passedMap.remove(key);
                     mapKeys.remove(key);
                     sortedMap.put(key, val);
                     break;
                 }
-
             }
-
         }
-
         return sortedMap;
     }
-
 }

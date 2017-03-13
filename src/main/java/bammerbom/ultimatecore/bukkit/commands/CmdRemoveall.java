@@ -25,11 +25,9 @@ package bammerbom.ultimatecore.bukkit.commands;
 
 import bammerbom.ultimatecore.bukkit.UltimateCommand;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.MobType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,8 +76,6 @@ public class CmdRemoveall implements UltimateCommand {
                 et = EntityType.fromName(args[0].toUpperCase());
             } else if (EntityType.fromName(args[0].replaceAll("_", "").toUpperCase()) != null) {
                 et = EntityType.fromName(args[0].replaceAll("_", "").toUpperCase());
-            } else if (MobType.fromName(args[0]) != null) {
-                et = MobType.fromName(args[0]).getType();
             } else if (!r.isInt(args[0])) {
                 r.sendMes(cs, "removeallEntityTypeNotFound", "%Type", args[0]);
                 return;
@@ -107,11 +103,7 @@ public class CmdRemoveall implements UltimateCommand {
         if (curn == 0) {
             ArrayList<String> s = new ArrayList<>();
             for (EntityType t : EntityType.values()) {
-                if (MobType.fromBukkitType(t) != null) {
-                    s.add(MobType.fromBukkitType(t).name());
-                } else {
                     s.add(t.getName().toLowerCase());
-                }
             }
             return s;
         }

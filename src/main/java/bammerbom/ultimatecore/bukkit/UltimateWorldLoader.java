@@ -23,8 +23,6 @@
  */
 package bammerbom.ultimatecore.bukkit;
 
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;

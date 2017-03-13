@@ -28,7 +28,6 @@ import bammerbom.ultimatecore.bukkit.api.UC;
 import bammerbom.ultimatecore.bukkit.api.UWorld;
 import bammerbom.ultimatecore.bukkit.api.UWorld.WorldFlag;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.MobType;
 import bammerbom.ultimatecore.bukkit.resources.utils.LocationUtil;
 import bammerbom.ultimatecore.bukkit.resources.utils.StringUtil;
 import org.bukkit.*;
@@ -40,7 +39,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -256,18 +254,6 @@ public class CmdWorld implements UltimateCommand {
         }
     }
 
-    private static void clear(File dir) {
-        for (File file : dir.listFiles()) {
-            if (file.getName().toLowerCase().contains("player")) {
-                continue;
-            }
-            if (file.isDirectory()) {
-                clear(file);
-            }
-            file.delete();
-        }
-    }
-
     public static void tp(CommandSender cs, String[] args) {
         if (!r.perm(cs, "uc.world", false, false) && !r.perm(cs, "uc.world.tp", false, false)) {
             r.sendMes(cs, "noPermissions");
@@ -313,7 +299,7 @@ public class CmdWorld implements UltimateCommand {
             if (flag.equalsIgnoreCase("monster") || flag.equalsIgnoreCase("monsterspawn")) {
                 if (value.equalsIgnoreCase("deny")) {
                     for (Entity en : world.getWorld().getEntities()) {
-                        if (en instanceof Monster || (MobType.fromBukkitType(en.getType()) != null && MobType.fromBukkitType(en.getType()).type.equals(MobType.Enemies.ENEMY))) {
+                        if (en instanceof Monster) {
                             en.remove();
                         }
                     }
@@ -329,7 +315,7 @@ public class CmdWorld implements UltimateCommand {
             } else if (flag.equalsIgnoreCase("animal") || flag.equalsIgnoreCase("animalspawn")) {
                 if (value.equalsIgnoreCase("deny")) {
                     for (Entity en : world.getWorld().getEntities()) {
-                        if (en instanceof Animals || (MobType.fromBukkitType(en.getType()) != null && !MobType.fromBukkitType(en.getType()).type.equals(MobType.Enemies.ENEMY))) {
+                        if (en instanceof Animals) {
                             en.remove();
                         }
                     }

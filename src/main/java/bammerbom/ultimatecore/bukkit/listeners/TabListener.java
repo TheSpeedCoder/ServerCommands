@@ -71,7 +71,8 @@ public class TabListener implements Listener {
 
         Bukkit.getPluginManager().registerEvents(new TabListener(), r.getUC());
         Bukkit.getScheduler().scheduleSyncRepeatingTask(r.getUC(), new Runnable() {
-            @Override
+            @SuppressWarnings("deprecation")
+			@Override
             public void run() {
                 for (Player p : r.getOnlinePlayers()) {
                     //Header and footer
@@ -120,7 +121,12 @@ public class TabListener implements Listener {
                         }
                         team.setPrefix(prefix);
                         team.setSuffix(suffix);
-                        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+                        // Add a check for 1.8/1.8.8 users
+                        if(Bukkit.getVersion().equals(1.8)){
+                        	return;
+                        } else {
+                        	team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+                        }
                         for (Player pl : r.getOnlinePlayers()) {
                             pl.setScoreboard(board);
                         }
@@ -131,21 +137,10 @@ public class TabListener implements Listener {
     }
 
     public static String replaceVariables(String base, Player p) {
-        String playerip = p.getAddress().getAddress().toString().split("/")[1].split(":")[0];
         String name = "";
-        String money = "";
         name = p.getName();
-        if (r.getVault() != null) {
-            if (r.getVault().getEconomy() != null) {
-                money = r.getVault().getEconomy().format(r.getVault().getEconomy().getBalance(p));
-            }
-        }
-        String ip = playerip;
-        String version = Bukkit.getServer().getVersion().split("\\(MC: ")[1].split("\\)")[0];
         int maxplayers = Bukkit.getServer().getMaxPlayers();
         int onlineplayers = r.getOnlinePlayers().length;
-        String servername = Bukkit.getServerName();
-
         String group = "";
         String prefix = "";
         String suffix = "";
@@ -163,26 +158,13 @@ public class TabListener implements Listener {
             }
         }
         String displayname = UC.getPlayer(p).getDisplayName();
-        String worldalias = p.getWorld().getName().charAt(0) + "";
-        String world = p.getWorld().getName();
-        String faction = r.getFaction(p) != null ? r.getFaction(p) : "";
-        String town = r.getTown(p) != null ? r.getTown(p) : "";
-
         base = base.replace("+Group", group);
         base = base.replace("+Prefix", prefix);
         base = base.replace("+Suffix", suffix);
         base = base.replace("+Name", name);
         base = base.replace("+Displayname", displayname);
-        base = base.replace("+World", world);
-        base = base.replace("+WorldAlias", worldalias);
-        base = base.replace("+Town", town);
-        base = base.replace("+Faction", faction);
-        base = base.replace("+Ip", ip);
-        base = base.replace("+Money", money);
-        base = base.replace("+Version", version);
         base = base.replace("+Maxplayers", maxplayers + "");
         base = base.replace("+Onlineplayers", onlineplayers + "");
-        base = base.replace("+Servername", servername);
         base = base.replace("+Uptime", ChatColor.stripColor(DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
         base = ChatColor.translateAlternateColorCodes('&', base);
         return base;

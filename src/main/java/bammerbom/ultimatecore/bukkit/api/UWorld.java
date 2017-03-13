@@ -23,7 +23,7 @@
  */
 package bammerbom.ultimatecore.bukkit.api;
 
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
+import bammerbom.ultimatecore.bukkit.JsonConfig;
 import bammerbom.ultimatecore.bukkit.resources.utils.FireworkUtil;
 import org.bukkit.*;
 

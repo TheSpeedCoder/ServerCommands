@@ -23,8 +23,8 @@
  */
 package bammerbom.ultimatecore.bukkit.api;
 
+import bammerbom.ultimatecore.bukkit.JsonConfig;
 import bammerbom.ultimatecore.bukkit.UltimateFileLoader;
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
 import bammerbom.ultimatecore.bukkit.r;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;

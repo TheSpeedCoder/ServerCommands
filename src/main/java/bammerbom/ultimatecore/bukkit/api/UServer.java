@@ -23,36 +23,28 @@
  */
 package bammerbom.ultimatecore.bukkit.api;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
+import bammerbom.ultimatecore.bukkit.JsonConfig;
 import bammerbom.ultimatecore.bukkit.UltimateFileLoader;
-import bammerbom.ultimatecore.bukkit.configuration.Config;
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
 import bammerbom.ultimatecore.bukkit.listeners.AutomessageListener;
 import bammerbom.ultimatecore.bukkit.listeners.TabListener;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.resources.utils.*;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.util.*;
 
 public class UServer {
-
-    static HashMap<String, Location> jails = null;
     static String motd = "";
-
     //Receiver, Sender
-    static Map<UUID, UUID> tp = new HashMap<>();
-    static Map<UUID, UUID> tph = new HashMap<>();
+    static Map<UUID, UUID> tp = new HashMap<UUID, UUID>();
+    static Map<UUID, UUID> tph = new HashMap<UUID, UUID>();
     //Warps
     static HashMap<String, Location> warps = null;
-    //Silence
-    static Boolean silence = null;
-    static Long silencetime = null;
 
     public static void start() {
         if (!StringUtil.nullOrEmpty(motd)) {
@@ -73,154 +65,6 @@ public class UServer {
 
     }
 
-    //Ban
-    public List<OfflinePlayer> getBannedOnlinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        BanList bans = Bukkit.getBanList(BanList.Type.NAME);
-        for (BanEntry en : bans.getBanEntries()) {
-            OfflinePlayer p = r.searchOfflinePlayer(en.getTarget());
-            if (p.isOnline()) {
-                pls.add(p);
-            }
-        }
-        return pls;
-    }
-
-    public List<OfflinePlayer> getBannedOfflinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        BanList bans = Bukkit.getBanList(BanList.Type.NAME);
-        for (BanEntry en : bans.getBanEntries()) {
-            pls.add(r.searchOfflinePlayer(en.getTarget()));
-        }
-        return pls;
-    }
-
-    //Deaf
-    public List<OfflinePlayer> getDeafOfflinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isDeaf()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public List<Player> getDeafOnlinePlayers() {
-        List<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isDeaf()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    //Mutes
-    public List<OfflinePlayer> getMutedOfflinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isMuted()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public List<Player> getMutedOnlinePlayers() {
-        List<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isMuted()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    //Jails
-    public List<OfflinePlayer> getJailedOfflinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isJailed()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public List<Player> getJailedOnlinePlayers() {
-        List<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isJailed()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    //Enchantingtable
-    public List<OfflinePlayer> getInCommandEnchantingtablePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isInCommandEnchantingtable()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public List<Player> getInCommandEnchantingtableOnlinePlayers() {
-        List<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isInCommandEnchantingtable()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    //Freeze
-    public List<OfflinePlayer> getFrozenOfflinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isFrozen()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public List<Player> getFrozenOnlinePlayers() {
-        List<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isFrozen()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    //God
-    public List<OfflinePlayer> getGodOfflinePlayers() {
-        List<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isGod()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public List<Player> getGodOnlinePlayers() {
-        List<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isGod()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
     //Invsee
     public List<Player> getInOnlineInventoryOnlinePlayers() {
         List<Player> pls = new ArrayList<>();
@@ -236,67 +80,6 @@ public class UServer {
         List<Player> pls = new ArrayList<>();
         for (Player pl : r.getOnlinePlayers()) {
             if (UC.getPlayer(pl).isInOfflineInventory()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    //Jails
-    public HashMap<String, Location> getJails() {
-        if (jails == null) {
-            jails = new HashMap<>();
-            for (String s : new Config(UltimateFileLoader.Djails).getKeys(true)) {
-                Location loc = LocationUtil.convertStringToLocation(new Config(UltimateFileLoader.Djails).getString(s));
-                jails.put(s, loc);
-            }
-        }
-        return jails;
-    }
-
-    public ArrayList<String> getJailsL() {
-        return new ArrayList<>(getJails().keySet());
-    }
-
-    public void addJail(String n, Location l) {
-        if (getJails().containsKey(n)) {
-            jails.remove(n);
-        }
-        jails.put(n, l);
-        JsonConfig c = new JsonConfig(UltimateFileLoader.Djails);
-        c.set(n, LocationUtil.convertLocationToString(l));
-        c.save();
-    }
-
-    public Location getJail(String n) {
-        if (!getJails().containsKey(n)) {
-            return null;
-        }
-        return getJails().get(n);
-    }
-
-    public void removeJail(String n) {
-        getJails();
-        jails.remove(n);
-        JsonConfig c = new JsonConfig(UltimateFileLoader.Djails);
-        c.set(n, null);
-        c.save();
-    }
-
-    public ArrayList<Player> getOnlineJailed() {
-        ArrayList<Player> pls = new ArrayList<>();
-        for (Player pl : r.getOnlinePlayers()) {
-            if (UC.getPlayer(pl).isJailed()) {
-                pls.add(pl);
-            }
-        }
-        return pls;
-    }
-
-    public ArrayList<OfflinePlayer> getOfflineJailed() {
-        ArrayList<OfflinePlayer> pls = new ArrayList<>();
-        for (OfflinePlayer pl : r.getOfflinePlayers()) {
-            if (UC.getPlayer(pl).isJailed()) {
                 pls.add(pl);
             }
         }
@@ -523,27 +306,6 @@ public class UServer {
         return AutomessageListener.currentmessage;
     }
 
-    public UKit getKit(String s) {
-        return new UKit(s.toLowerCase());
-    }
-
-    public List<UKit> getKits() {
-        ArrayList<String> kitnames = new ArrayList<>(new Config(UltimateFileLoader.Dkits).getKeys(false));
-        ArrayList<UKit> kits = new ArrayList<>();
-        for (String s : kitnames) {
-            kits.add(getKit(s.toLowerCase()));
-        }
-        return kits;
-    }
-
-    public List<String> getKitNames() {
-        ArrayList<String> list = new ArrayList<>();
-        for (String key : new Config(UltimateFileLoader.Dkits).getKeys(false)) {
-            list.add(key.toLowerCase());
-        }
-        return list;
-    }
-
     public boolean isDebug() {
         return r.isDebug();
     }
@@ -554,60 +316,6 @@ public class UServer {
 
     public JsonConfig getGlobalConfig() {
         return new JsonConfig(UltimateFileLoader.Dglobal);
-    }
-
-    public boolean isSilenced() {
-        if (silence == null) {
-            silence = getGlobalConfig().getBoolean("silence");
-            if (silence == null) {
-                silence = false;
-            }
-        }
-        if (getSilenceTime() >= 1 && getSilenceTimeLeft() <= 1 && silence) {
-            setSilenced(false);
-            //TODO broadcast unsilence message r.sendMes(getOnlinePlayer(), "unsilenceTarget");
-            return false;
-        }
-        return silence;
-    }
-
-    public void setSilenced(boolean s) {
-        silence = s;
-        JsonConfig c = getGlobalConfig();
-        c.set("silence", s);
-        c.set("silencetime", null);
-        c.save();
-    }
-
-    public Long getSilenceTime() {
-        if (silencetime != null) {
-            return silencetime;
-        }
-        if (!getGlobalConfig().contains("silencetime")) {
-            return 0L;
-        }
-        silencetime = getGlobalConfig().getLong("silencetime");
-        return getGlobalConfig().getLong("silencetime");
-
-    }
-
-    public Long getSilenceTimeLeft() {
-        return getSilenceTime() - System.currentTimeMillis();
-    }
-
-    public void setSilenced(Boolean fr, Long time) {
-        JsonConfig conf = getGlobalConfig();
-        if (silencetime == null || silencetime == 0L) {
-            silencetime = -1L;
-        }
-        if (time >= 1) {
-            time = time + System.currentTimeMillis();
-        }
-        conf.set("silence", fr);
-        conf.set("silencetime", time);
-        conf.save();
-        silence = fr;
-        silencetime = fr ? time : -1L;
     }
 
     public Location getGlobalSpawn() {

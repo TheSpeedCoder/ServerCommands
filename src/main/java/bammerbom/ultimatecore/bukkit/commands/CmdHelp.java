@@ -23,9 +23,10 @@
  */
 package bammerbom.ultimatecore.bukkit.commands;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.UltimateCommand;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -123,20 +124,19 @@ class TextInput implements UText {
 }
 
 class HelpInput implements UText {
-
     private final transient List<String> lines = new ArrayList<>();
     private final transient List<String> chapters = new ArrayList<>();
     private final transient Map<String, Integer> bookmarks = new HashMap<>();
 
-    public HelpInput(CommandSender user, String match) {
-        boolean reported = false;
-        List newLines = new ArrayList();
+    @SuppressWarnings("rawtypes")
+	public HelpInput(CommandSender user, String match) {
+        List<String> newLines = new ArrayList<String>();
         String pluginName;
         String pluginNameLow;
 
         for (Plugin p : Bukkit.getServer().getPluginManager().getPlugins()) {
             try {
-                List pluginLines = new ArrayList();
+                List<String> pluginLines = new ArrayList<String>();
                 PluginDescriptionFile desc = p.getDescription();
                 Map<String, Map<String, Object>> cmds = desc.getCommands();
                 pluginName = p.getDescription().getName();
@@ -148,7 +148,7 @@ class HelpInput implements UText {
 
                 for (Map.Entry k : cmds.entrySet()) {
                     if ((pluginNameLow.contains(match)) || (((String) k.getKey()).toLowerCase(Locale.ENGLISH).contains(match))) {
-                        Map value = (Map) k.getValue();
+                        Map<?, ?> value = (Map<?, ?>) k.getValue();
                         Object permissions = null;
                         if (value.containsKey("permission")) {
                             permissions = value.get("permission");
@@ -202,18 +202,18 @@ class PluginCommandsInput implements UText {
     private final transient List<String> chapters = new ArrayList<>();
     private final transient Map<String, Integer> bookmarks = new HashMap<>();
 
-    public PluginCommandsInput(CommandSender user, String match) {
+    @SuppressWarnings("rawtypes")
+	public PluginCommandsInput(CommandSender user, String match) {
         if (!r.perm(user, "uc.plugins", false, false)) {
             return;
         }
-        boolean reported = false;
-        List newLines = new ArrayList();
+        List<String> newLines = new ArrayList<String>();
         String pluginName;
         String pluginNameLow;
 
         for (Plugin p : Bukkit.getServer().getPluginManager().getPlugins()) {
             try {
-                List pluginLines = new ArrayList();
+                List<String> pluginLines = new ArrayList<String>();
                 PluginDescriptionFile desc = p.getDescription();
                 Map<String, Map<String, Object>> cmds = desc.getCommands();
                 pluginName = p.getDescription().getName();
@@ -226,7 +226,7 @@ class PluginCommandsInput implements UText {
                 for (Map.Entry k : cmds.entrySet()) {
                     try {
                         if ((pluginNameLow.contains(match)) || (((String) k.getKey()).toLowerCase(Locale.ENGLISH).contains(match))) {
-                            Map value = (Map) k.getValue();
+                            Map<?, ?> value = (Map<?, ?>) k.getValue();
                             Object permissions = null;
                             if (value.containsKey("permission")) {
                                 permissions = value.get("permission");

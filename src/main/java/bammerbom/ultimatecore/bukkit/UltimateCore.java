@@ -1,5 +1,5 @@
 /*
- * This file is part of UltimateCore, licensed under the MIT License (MIT).
+ * This file is part of ServerCommands, licensed under the MIT License (MIT).
  *
  * Copyright (c) Bammerbom
  *
@@ -28,8 +28,6 @@ import bammerbom.ultimatecore.bukkit.api.UServer;
 import bammerbom.ultimatecore.bukkit.commands.CmdHeal;
 import bammerbom.ultimatecore.bukkit.commands.CmdRules;
 import bammerbom.ultimatecore.bukkit.listeners.*;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
-import bammerbom.ultimatecore.bukkit.resources.classes.MetaItemStack;
 import bammerbom.ultimatecore.bukkit.resources.databases.ItemDatabase;
 import bammerbom.ultimatecore.bukkit.resources.utils.*;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -37,16 +35,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 
 public class UltimateCore extends JavaPlugin implements Listener {
-
     public static File file;
     private static UltimateCore instance = null;
 
@@ -74,8 +67,6 @@ public class UltimateCore extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         try {
-            //
-            Long time = System.currentTimeMillis();
             //UTIL STARTUP
             file = getFile();
             UltimateFileLoader.Enable();
@@ -88,7 +79,6 @@ public class UltimateCore extends JavaPlugin implements Listener {
             UltimateSigns.start();
             PerformanceUtil.getTps();
             ItemDatabase.enable();
-            //
             if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
                 UEconomy.start();
             }
@@ -96,83 +86,40 @@ public class UltimateCore extends JavaPlugin implements Listener {
             UServer.start();
             CmdHeal.start();
             CmdRules.start();
-            MetaItemStack.start();
             ItemUtil.start();
             //UTIL STARTUP END
-            String c = Bukkit.getServer().getVersion().split("\\(MC: ")[1].split("\\)")[0];
-            Integer v = Integer.parseInt(c.split("\\.")[1]);
-            if (v < 10) {
-                Bukkit.getConsoleSender().sendMessage(" ");
-                r.log(ChatColor.DARK_RED + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-                r.log(ChatColor.YELLOW + "Warning! Version " + c + " of Minecraft is not supported!");
-                r.log(ChatColor.YELLOW + "Use UltimateCore at your own risk!");
-                r.log(ChatColor.DARK_RED + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-                Bukkit.getConsoleSender().sendMessage(" ");
-            }
-            if (System.getProperty("java.version").startsWith("1.7")) {
-                r.log(ChatColor.RED + "---------------------------------------------------");
-                r.log(ChatColor.RED + "This server is still running java 7");
-                r.log(ChatColor.RED + "UltimateCore will not support this anymore soon.");
-                r.log(ChatColor.RED + "---------------------------------------------------");
-            }
-            //
-            UltimateConverter.convert();
-            //
-            r.runUpdater();
-            r.runMetrics();
             //LISTENER STARTUP
-            PluginManager pm = Bukkit.getPluginManager();
             GlobalPlayerListener.start();
-            pm.registerEvents(new GlobalWorldListener(), this);
+            Bukkit.getPluginManager().registerEvents(new GlobalWorldListener(), this);
             AfkListener.start();
             AutomessageListener.start();
             AutosaveListener.start();
-            BloodListener.start();
-            ChatListener.start();
-            DeathmessagesListener.start();
-            DynmapListener.start();
             ExplosionListener.start();
             JoinLeaveListener.start();
             MotdListener.start();
             PluginStealListener.start();
-            RespawnListener.start();
             SignListener.start();
             TabListener.start();
-            TreeListener.start();
             UnknownCommandListener.start();
             WeatherListener.start();
-            MinecraftServerListener.start();
             Bukkit.getPluginManager().registerEvents(this, this);
             //LISTENER STARTUP END
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UltimateTick(), 40L, 40L);
-            //
-            time = System.currentTimeMillis() - time;
-            r.log(ChatColor.GREEN + "Enabled UltimateCore! (" + time + "ms)");
-
         } catch (Exception ex) {
-            ErrorLogger.log(ex, "Failed to enable UltimateCore");
+            ErrorLogger.log(ex, "Failed to enable ServerCommands");
         }
         UltimateWorldLoader.startWorldLoading();
-        test();
     }
 
     @Override
     public void onDisable() {
         try {
-            //
-            Long time = System.currentTimeMillis();
-            //
             r.removeUC();
             ItemDatabase.disable();
-            DynmapListener.stop();
             BossbarUtil.stop();
-            //
-            time = System.currentTimeMillis() - time;
-            r.log(ChatColor.GREEN + "Disabled UltimateCore! (" + time + "ms)");
-            //
-
+            r.log(ChatColor.GREEN + "Disabled ServerCommands!");
         } catch (Exception ex) {
-            ErrorLogger.log(ex, "Failed to disable UltimateCore");
+            ErrorLogger.log(ex, "Failed to disable ServerCommands");
         }
     }
 
@@ -185,20 +132,5 @@ public class UltimateCore extends JavaPlugin implements Listener {
             ErrorLogger.log(ex, "Failed to execute command: /" + label + " " + r.getFinalArg(args, 0));
         }
         return true;
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        if (System.getProperty("java.version").startsWith("1.7")) {
-            if (e.getPlayer().hasPermission("asklnsdiabasdiubasas.saasdnuiasds")) {
-                e.getPlayer().sendMessage(ChatColor.RED + "---------------------------------------------------");
-                e.getPlayer().sendMessage(ChatColor.RED + "This server is still running java 7");
-                e.getPlayer().sendMessage(ChatColor.RED + "UltimateCore will not support this anymore soon.");
-                e.getPlayer().sendMessage(ChatColor.RED + "---------------------------------------------------");
-            }
-        }
-    }
-
-    public void test() {
     }
 }

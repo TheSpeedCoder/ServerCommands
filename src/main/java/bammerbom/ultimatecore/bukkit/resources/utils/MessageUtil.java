@@ -23,7 +23,6 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -33,6 +32,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
+
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -1497,7 +1499,8 @@ final class ArrayWrapper<E> {
      *
      * @param elements The elements of the array.
      */
-    public ArrayWrapper(E... elements) {
+    @SafeVarargs
+	public ArrayWrapper(E... elements) {
         setArray(elements);
     }
 

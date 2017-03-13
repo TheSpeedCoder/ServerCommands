@@ -23,8 +23,9 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import org.apache.commons.io.IOUtils;
+
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 
 import java.io.*;
 import java.nio.charset.Charset;

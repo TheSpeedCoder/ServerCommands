@@ -58,7 +58,8 @@ public class CmdHeal implements UltimateCommand {
         return Arrays.asList();
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void run(final CommandSender cs, String label, String[] args) {
         if (!r.perm(cs, "uc.heal", false, true)) {
             return;

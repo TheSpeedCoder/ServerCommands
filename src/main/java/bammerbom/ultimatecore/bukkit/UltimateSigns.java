@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UltimateSigns {
-
     public static List<UltimateSign> signs = new ArrayList<>();
 
     public static void start() {
@@ -38,7 +37,6 @@ public class UltimateSigns {
         signs.add(new SignFree());
         signs.add(new SignGamemode());
         signs.add(new SignHeal());
-        signs.add(new SignKit());
         signs.add(new SignRepair());
         signs.add(new SignTime());
         signs.add(new SignWarp());

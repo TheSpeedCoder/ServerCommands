@@ -23,9 +23,10 @@
  */
 package bammerbom.ultimatecore.bukkit.resources.utils;
 
-import bammerbom.ultimatecore.bukkit.jsonconfiguration.JsonConfig;
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
+import bammerbom.ultimatecore.bukkit.JsonConfig;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
+
 import com.google.common.collect.ImmutableList;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

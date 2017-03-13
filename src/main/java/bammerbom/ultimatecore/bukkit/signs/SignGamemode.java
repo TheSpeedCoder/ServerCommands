@@ -94,7 +94,6 @@ public class SignGamemode implements UltimateSign {
             return;
         }
         try {
-            GameMode mode;
             switch (event.getLine(1).toLowerCase()) {
                 case "survival":
                 case "s":

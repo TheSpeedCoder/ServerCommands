@@ -142,7 +142,8 @@ public class ConfigurationSerialization {
      * @param alias Alias to register as
      * @see SerializableAs
      */
-    public static void registerClass(Class<?> clazz, String alias) {
+    @SuppressWarnings("unchecked")
+	public static void registerClass(Class<?> clazz, String alias) {
         aliases.put(alias, (Class<? extends ConfigurationSerializable>) clazz);
     }
 

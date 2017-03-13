@@ -704,14 +704,14 @@ public class ConfigSection {
     }
 
     // Bukkit
-    public Vector getVector(String path) {
+    public Vector<?> getVector(String path) {
         Object def = getDefault(path);
-        return getVector(path, (def instanceof Vector) ? (Vector) def : null);
+        return getVector(path, (def instanceof Vector) ? (Vector<?>) def : null);
     }
 
-    public Vector getVector(String path, Vector def) {
+    public Vector<?> getVector(String path, Vector<?> def) {
         Object val = get(path, def);
-        return (val instanceof Vector) ? (Vector) val : def;
+        return (val instanceof Vector) ? (Vector<?>) val : def;
     }
 
     public boolean isVector(String path) {

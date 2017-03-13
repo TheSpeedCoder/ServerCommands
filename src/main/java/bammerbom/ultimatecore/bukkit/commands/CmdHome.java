@@ -23,10 +23,10 @@
  */
 package bammerbom.ultimatecore.bukkit.commands;
 
+import bammerbom.ultimatecore.bukkit.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.UltimateCommand;
 import bammerbom.ultimatecore.bukkit.api.UC;
 import bammerbom.ultimatecore.bukkit.r;
-import bammerbom.ultimatecore.bukkit.resources.classes.ErrorLogger;
 import bammerbom.ultimatecore.bukkit.resources.utils.LocationUtil;
 import bammerbom.ultimatecore.bukkit.resources.utils.StringUtil;
 import org.bukkit.Location;

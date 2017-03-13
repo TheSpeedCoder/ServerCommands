@@ -33,14 +33,7 @@ public class UltimateTick implements Runnable {
     public void run() {
         for (Player pl : r.getOnlinePlayers()) {
             UPlayer p = UC.getPlayer(pl);
-            //p.isBanned();
-            p.isDeaf();
-            p.isFrozen();
-            p.isGod();
-            p.isJailed();
-            p.isMuted();
             p.isVanish();
         }
     }
-
 }

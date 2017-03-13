@@ -110,7 +110,8 @@ public class LocationUtil {
         }
     }
 
-    public static ItemStack convertBlockToItem(final Block block) {
+    @SuppressWarnings("deprecation")
+	public static ItemStack convertBlockToItem(final Block block) {
         final ItemStack is = new ItemStack(block.getType(), 1, (short) 0, block.getData());
         switch (is.getType()) {
             case WOODEN_DOOR:
@@ -211,7 +212,7 @@ public class LocationUtil {
         if (world == null || world == null) {
             return false;
         }
-        if (world.equals(user.getWorld()) && (user.getGameMode() == GameMode.CREATIVE || UC.getPlayer(user).isGod()) && user.getAllowFlight()) {
+        if (world.equals(user.getWorld()) && (user.getGameMode() == GameMode.CREATIVE || user.getAllowFlight())) {
             return false;
         }
 
@@ -243,7 +244,7 @@ public class LocationUtil {
     }
 
     public static Location searchSafeLocation(final Player user, final Location loc) {
-        if (loc.getWorld().equals(user.getWorld()) && (user.getGameMode() == GameMode.CREATIVE || UC.getPlayer(user).isGod()) && user.getAllowFlight()) {
+        if (loc.getWorld().equals(user.getWorld()) && (user.getGameMode() == GameMode.CREATIVE || user.getAllowFlight())) {
             if (shouldFly(loc)) {
                 user.setFlying(true);
             }
@@ -389,7 +390,8 @@ public class LocationUtil {
      * @param p   The player who is teleported
      * @param loc The location where the effect is shown
      */
-    public static void playEffect(Player p, Location loc) {
+    @SuppressWarnings({ "deprecation" })
+	public static void playEffect(Player p, Location loc) {
         if (p != null && UC.getPlayer(p).isVanish()) {
             return;
         }
@@ -397,8 +399,14 @@ public class LocationUtil {
             if (p != null && !pl.canSee(p)) {
                 continue;
             }
+            //TODO Add better looking effect
             pl.playEffect(loc, Effect.ENDER_SIGNAL, 10);
+            // Version Check
+            if(Bukkit.getVersion().equals(1.8)){
+            	//TODO Add Effect
+            } else {
             pl.playSound(loc, Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
+            }
         }
     }
 
